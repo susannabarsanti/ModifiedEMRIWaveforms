@@ -1,2 +1,2 @@
 # ModiefiedEMRIWaveforms
-Repository for Asymmetric Binaries with Scalar Fields. FastEMRIWaveforms (FEW) beyond GR. 
+Repository for asymmetric binaries with scalar fields, building on FastEMRIWaveforms. 
