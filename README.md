@@ -6,9 +6,9 @@ If you make use of this repository, please see [citation](#citation)
 ## Citation
 
 ```
-@article{gliorio2026,
+@article{xxx,
   title = {ModifiedEMRIWaveforms},
-  author = {Gliorio, Sara and  Barsanti, Susanna},
+  author = {xxx},
   journal = {In preparation},
   year = {2026},
   url = {https://github.com/susannabarsanti/ModiefiedEMRIWaveforms}
