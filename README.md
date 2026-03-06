@@ -5,12 +5,6 @@ If you make use of this repository, please see [citation](#citation)
 
 ## Citation
 
-```
-@article{xxx,
-  title = {ModifiedEMRIWaveforms},
-  author = {xxx},
-  journal = {In preparation},
-  year = {2026},
-  url = {https://github.com/susannabarsanti/ModiefiedEMRIWaveforms}
-}
-```
+If you use this code in your research, please cite the software release.
+You can find the citation information in the `CITATION.cff` file in this repository.
+
