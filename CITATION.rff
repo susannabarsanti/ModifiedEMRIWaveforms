@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: ModifiedEMRIWaveforms
+message: "If you use this software, please cite it as below."
+type: software
+
+authors:
+  - family-names: Gliorio
+    given-names: Sara
+    affiliation: GSSI, Gran Sasso Science Institute
+    orcid: https://orcid.org/0009-0007-7207-784X
+
+authors:
+  - family-names: Barsanti
+    given-names: Susanna
+    affiliation: UCD, University College Dublin
+    orcid: https://orcid.org/0000-0001-7321-2512
+
+abstract: >
+  Python scripts and data files for EMRI waveform models with scalar fields.
+
+keywords:
+  - gravitational waves
+  - Extreme Mass Ratio Inspirals 
+  - scalar fields
+  - black holes
+
+repository-code: https://github.com/susannabarsanti/ModiefiedEMRIWaveforms
+version: 1.0.0
+date-released: 2026-03-06
+license: MIT
