@@ -64,9 +64,12 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #MODIFY the path here
-        z_A, u_A, F_A = self.load_scalar_flux_table("/home/people/sbarsanti/scratch/EMRI-FoM-Scalar/pipeline/tabA_ScalarKerr.dat") 
-        z_B, u_B, F_B = self.load_scalar_flux_table("/home/people/sbarsanti/scratch/EMRI-FoM-Scalar/pipeline/tabB_ScalarKerr.dat")
+        BASE_DIR = Path(__file__).resolve().parent
+        DATA_DIR = BASE_DIR / "data"
+        data_file_A = DATA_DIR / "tabA_ScalarKerr.dat"
+        data_file_B = DATA_DIR / "tabB_ScalarKerr.dat"
+        z_A, u_A, F_A = self.load_scalar_flux_table(data_file_A) 
+        z_B, u_B, F_B = self.load_scalar_flux_table(data_file_B)
 
         z_A_unique_vals = np.unique(z_A)    
         u_A_unique_vals = np.unique(u_A)   
