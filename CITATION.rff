@@ -17,10 +17,11 @@ abstract: >
   Python scripts and data files for EMRI waveform models with scalar fields.
 
 keywords:
-  - gravitational waves
+  - Gravitational Waves
   - Extreme Mass Ratio Inspirals 
-  - scalar fields
-  - black holes
+  - LISA 
+  - Scalar Fields
+  - Black Holes
 
 repository-code: https://github.com/susannabarsanti/ModiefiedEMRIWaveforms
 version: 1.0.0
