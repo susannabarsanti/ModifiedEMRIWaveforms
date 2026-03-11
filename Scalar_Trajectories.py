@@ -1,133 +1,188 @@
-import os
-import sys
-
-import cupy as cp
 import numpy as np
-import time
-import matplotlib.pyplot as plt
 
-# Import relevant EMRI packages
-import few
-from few.waveform import FastSchwarzschildEccentricFlux, GenerateEMRIWaveform
-from few.trajectory.ode import PN5, SchwarzEccFlux, KerrEccEqFlux
+from few.trajectory.ode import KerrEccEqFlux
+from few.utils.geodesic import  get_separatrix
 
-from few.trajectory.inspiral import EMRIInspiral
+from multispline.spline import BicubicSpline
 
-from few.summation.directmodesum import DirectModeSum
-from few.summation.interpolatedmodesum import InterpolatedModeSum
-from few.summation.fdinterp import FDInterpolatedModeSum
-from few.amplitude.ampinterp2d import AmpInterpKerrEccEq
-from few.utils.modeselector import ModeSelector, NeuralModeSelector
+from pathlib import Path
 
-from few.trajectory.ode.base import ODEBase
-from few.trajectory.ode import SchwarzEccFlux
-from few.utils.geodesic import get_fundamental_frequencies, get_separatrix, ELQ_to_pex
-from few.utils.mappings.jacobian import ELdot_to_PEdot_Jacobian
+# =====================================================================
+# Scalar flux for circular equatorial Kerr orbits
+# =====================================================================
 
-from few.waveform.base import SphericalHarmonicWaveformBase
-from few.amplitude.romannet import RomanAmplitude
-
-from few.utils.baseclasses import (
-    SchwarzschildEccentric,
-    KerrEccentricEquatorial,
-    Pn5AAK,
-    ParallelModuleBase,
-)
-
-from typing import Union, Optional
-from multispline.spline import BicubicSpline, TricubicSpline, CubicSpline
-
-
-## ====================================================================# 
-## ================== KERR CIRCULAR ===================================#
-## ====================================================================#  
 class KerrCircEqFluxScalar(KerrEccEqFlux):
     @staticmethod
+    # -----------------------------------------------------------------
+    # Load scalar flux table from file and apply PN rescaling
+    # -----------------------------------------------------------------
     def load_scalar_flux_table(filename):
+        """
+        Load a scalar flux table from a .dat file and apply a post-Newtonian rescaling.
+        
+        Parameters
+        ----------
+        filename : str or Path
+            Path to the scalar flux table file.
+            
+        Returns
+        -------
+        z_col, u_col : arrays
+            Grid coordinates used for interpolation.
+        F_total_with_PN_rescaling : array
+            Scalar flux (horizon + infinity) with PN rescaling applied.
+        """
+        
+        # Load table data
         data = np.loadtxt(filename)
-        a_col = data[:, 0]
-        p_col = data[:, 1]
-        F_hor = data[:, 4]
-        F_inf = data[:, 5]
-        z_col = data[:, 7]
-        u_col = data[:, 8]
+        a_col = data[:, 0]      # spin of the black hole
+        p_col = data[:, 1]      # semi-latus rectum
+        F_hor = data[:, 4]      # scalar flux at the horizon
+        F_inf = data[:, 5]      # scalar flux at infinity
+        z_col = data[:, 7]      # rescaled spin coordinate for interpolation
+        u_col = data[:, 8]      # rescaled p coordinate for interpolation
 
+        # Total scalar flux
         F_total_col = (F_hor + F_inf)
 
-        Omega_phi = 1.0 / (p_col**1.5 + a_col)
-
+        # Leading-order post-Newtonian flux
         Epn = 1.0 / (12. * p_col**(4.))
 
+        # Rescale the flux for interpolation
         F_total_with_PN_rescaling = (F_total_col - Epn) * p_col**(6.)
     
         return z_col, u_col, F_total_with_PN_rescaling
 
+
+    # -----------------------------------------------------------------
+    # Initialize object: load flux tables and precompute constants
+    # -----------------------------------------------------------------
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the flux object. Precompute constants, separatrix, and table spin.
+        """
+        
+        # Call the parent class constructor (KerrEccEqFlux)
         super().__init__(*args, **kwargs)
+
+        # Tolerance for interpolation bounds
+        self.coord_tol = 1e-12  # used for both z and u checks
+
+        # Paths to flux table files
         BASE_DIR = Path(__file__).resolve().parent
         DATA_DIR = BASE_DIR / "data"
         data_file_A = DATA_DIR / "tabA_ScalarKerr.dat"
         data_file_B = DATA_DIR / "tabB_ScalarKerr.dat"
+        
+        # Load tables
         z_A, u_A, F_A = self.load_scalar_flux_table(data_file_A) 
         z_B, u_B, F_B = self.load_scalar_flux_table(data_file_B)
 
+        # Get unique grid points for bicubic interpolation
         z_A_unique_vals = np.unique(z_A)    
         u_A_unique_vals = np.unique(u_A)   
         z_B_unique_vals = np.unique(z_B)    
         u_B_unique_vals = np.unique(u_B)   
-
+        
+        # Reshape flux arrays into 2D grids (z x u)
         F_A_grid = F_A.reshape((len(z_A_unique_vals), len(u_A_unique_vals)))
         F_B_grid = F_B.reshape((len(z_B_unique_vals), len(u_B_unique_vals)))
-
+        
+        # Build bicubic interpolators for the two regions of the flux table
         self.Fphi_interp_A = BicubicSpline(z_A_unique_vals, u_A_unique_vals, F_A_grid)
         self.Fphi_interp_B = BicubicSpline(z_B_unique_vals, u_B_unique_vals, F_B_grid)   
-
-    def compute_Edot_phi(self, p):
-        #checks to do: NEGATIVE SPIN
-        a = self.a
-        p_sep = get_separatrix(a, 0.,1.0)
-        amin = -999/1000
-        amax = 999/1000
-
-        chi_min = (1 - amax)**(1/3)
-        chi_max = (1 - amin)**(1/3)
-
-        delta_pAmin = 1e-3
-        delta_pAmax = 9.0 + delta_pAmin
-        Cp = delta_pAmax - 2 * delta_pAmin
-        CDelta = np.log(delta_pAmax - delta_pAmin)
-        pminA = delta_pAmin + p_sep
-        pmaxA = delta_pAmax + p_sep
-
-        delta_pBmin = delta_pAmax
-        delta_pBmax = 200.0 
-        pminB = delta_pBmin + p_sep
-        pmaxB = delta_pBmax + p_sep
-
-        z = ((1 - a)**(1/3) - chi_min) / (chi_max - chi_min)
-
-        if p < pmaxA:
-            u = (np.log(p - p_sep + Cp) - CDelta) / np.log(2)
-            F = self.Fphi_interp_A(z, u)
-        else:
-            u = (delta_pBmin**(-0.5) - (p - p_sep)**(-0.5)) / (delta_pBmin**(-0.5) - (pmaxB - p_sep)**(-0.5))
-            F = self.Fphi_interp_B(z, u)
         
-        Omega_phi = 1.0 / (p**1.5 + a)
-        Epn = 1.0 / (12. * p**(4.))
+        # Precompute constants for interpolation
+        self.amin = -999/1000
+        self.amax = 999/1000
+        self.chi_min = (1 - self.amax)**(1/3)
+        self.chi_max = (1 - self.amin)**(1/3)
 
+        self.delta_pAmin = 1e-3
+        self.delta_pAmax = 9.0 + self.delta_pAmin
+        self.Cp = self.delta_pAmax - 2 * self.delta_pAmin
+        self.CDelta = np.log(self.delta_pAmax - self.delta_pAmin)
+        self.delta_pBmin = self.delta_pAmax
+        self.delta_pBmax = 200.0
+
+        # Precompute effective spin for flux table (handles retrograde)
+        if self.x0 == 1.0:
+            self.a_table = self.a  # prograde
+        elif self.x0 == -1.0:
+            self.a_table = -self.a  # retrograde
+        else:
+            raise ValueError("Invalid x0 value. Expected 1.0 or -1.0.")
+
+        # Compute separatrix for table spin
+        self.p_sep = get_separatrix(self.a_table, 0., self.x0)
+
+        # Precompute max p for interpolation regions
+        self.pmaxA = self.delta_pAmax + self.p_sep
+        self.pmaxB = self.delta_pBmax + self.p_sep
+
+
+
+
+    # -----------------------------------------------------------------
+    # Compute scalar energy flux
+    # -----------------------------------------------------------------
+    def compute_Edot_phi(self, p):
+        """
+        Compute scalar energy flux Edot_phi for a circular orbit at radius p.
+        """
+        if p <= self.p_sep:
+            raise ValueError(f"Orbital radius p={p} must be > separatrix p_sep={self.p_sep}.")
+
+        # Define normalized spin coordinate for interpolation
+        z = ((1 - self.a_table)**(1/3) - self.chi_min) / (self.chi_max - self.chi_min)
+        
+        # Check if z is within valid interpolation range
+        if z < self.coord_tol or z > 1.0 - self.coord_tol:
+            raise ValueError(f"Normalized spin coordinate z = {z} is outside valid range [{self.coord_tol}, {1.0 - self.coord_tol}].")
+
+
+        # Compute normalized orbital radius coordinate for interpolation
+        #  Interpolate using table A
+        if p < self.pmaxA:
+            u = (np.log(p - self.p_sep + self.Cp) - self.CDelta) / np.log(2)
+            
+            if u < self.coord_tol or u > 1.0 - self.coord_tol:
+                raise ValueError(f"Normalized spin coordinate u = {u} is outside valid range [{self.coord_tol}, {1.0 - self.coord_tol}].")
+            
+            F = self.Fphi_interp_A(z, u)   
+        #  Interpolate using table B              
+        else:
+            u = (self.delta_pBmin**(-0.5) - (p - self.p_sep)**(-0.5)) / (self.delta_pBmin**(-0.5) - (self.pmaxB - self.p_sep)**(-0.5))
+
+            if u < self.coord_tol or u > 1.0 - self.coord_tol:
+                raise ValueError(f"Normalized spin coordinate u = {u} is outside valid range [{self.coord_tol}, {1.0 - self.coord_tol}].")
+            
+            F = self.Fphi_interp_B(z, u)           
+        
+        # Add leading-order post-Newtonian contribution 
+        Epn = 1.0 / (12. * p**(4.))
         Edot_phi = (F * p**(- 6.) + Epn)
 
         return Edot_phi
 
+    
+    
+    # -----------------------------------------------------------------
+    # Modify ODE RHS with scalar flux
+    # -----------------------------------------------------------------
     def modify_rhs(self, ydot, y):
+        """
+        Add scalar flux contribution to the RHS of orbital evolution ODE.
+        """
+        
+        # Compute scalar flux at current radius
         Edot_phi = self.compute_Edot_phi(y[0])
 
-        # Scale by scalar charge squared
-        q_s2 = self.additional_args[2] if hasattr(self, "additional_args") and len(self.additional_args) > 0 else 0.0
-
+        # Scale by scalar charge squared if provided
+        q_s2 = self.additional_args[0] if hasattr(self, "additional_args") and len(self.additional_args) > 0 else 0.0
         Edot_phi *= q_s2
-
+        
+        # Compute dE/dp using Kerr circular orbit formula
         sqrt_r = np.sqrt(y[0])
         r_32 = y[0]**1.5
         r2 = y[0]**2
@@ -136,5 +191,6 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         term2 = 2 * self.a * r_32 + (-3 + y[0]) * r2
         denominator = 2 * term1 * np.sqrt(term2)
         dE_dp = numerator/denominator
-
-        ydot[0] = (ydot[0] - Edot_phi / dE_dp)
+        
+        # Update RHS of orbital evolution ODE with scalar flux contribution
+        ydot[0] -= Edot_phi / dE_dp
