@@ -1,0 +1,10 @@
+LICENSE
+README.md
+setup.py
+ModifiedEMRIWaveform.egg-info/PKG-INFO
+ModifiedEMRIWaveform.egg-info/SOURCES.txt
+ModifiedEMRIWaveform.egg-info/dependency_links.txt
+ModifiedEMRIWaveform.egg-info/requires.txt
+ModifiedEMRIWaveform.egg-info/top_level.txt
+mew/__init__.py
+mew/scalar_flux.py
