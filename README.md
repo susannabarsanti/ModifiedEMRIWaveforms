@@ -13,7 +13,7 @@ After installing FEW, clone this repository:
 ```
 git clone https://github.com/susannabarsanti/ModifiedEMRIWaveforms.git
 cd ModifiedEMRIWaveforms
-pip install -e .
+pip install .
 ```
 Alternatively, you can download the repository as a ZIP archive from GitHub.
 
