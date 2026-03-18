@@ -31,6 +31,7 @@ from mew import KerrCircEqFluxScalar
 You can now use the trajectory class in FEW, for instance: 
 ```
 from few.waveform import GenerateEMRIWaveform
+
 inspiral_kwargs = {
     'flux_output_convention':'pex',
     'func':KerrCircEqFluxScalar
