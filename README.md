@@ -23,6 +23,14 @@ The files in ModifiedEMRIWaveforms include:
 - mew/data/ : data folder containing the fluxes for trajectory production
 - notebooks/example.ipynb : interactive notebook demonstrating how to run the code
 
+## Trajectory: KerrCircEqFluxScalar
+The class KerrCircEqFluxScalar build equatorial circular trajectories around Kerr black holes. The domain of validity is the same of FEW v2.0.0 for eccentricity e=0, i.e. 
+- semi-latus rectum between the separatrix and 200M;
+- primary spin between -0.999M and 0.999M.
+
+## Data
+The scalar fluxes have been computed with [STORM](https://github.com/saragliorio/STORM) with an accuracy of $10^{-8}$
+
 ## Usage 
 Once the repository is downloaded, you can produce your modified waveform in a python script by importing the class as
 ```
