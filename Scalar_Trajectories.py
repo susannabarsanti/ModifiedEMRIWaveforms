@@ -61,9 +61,10 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         """
         Initialize the flux object. Precompute constants, separatrix, and table spin.
         """
-        
+
         # Call the parent class constructor (KerrEccEqFlux)
         super().__init__(*args, **kwargs)
+
 
         # Tolerance for interpolation bounds
         self.coord_tol = 1e-12  # used for both z and u checks
@@ -105,58 +106,72 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         self.delta_pBmin = self.delta_pAmax
         self.delta_pBmax = 200.0
 
-        # Precompute effective spin for flux table (handles retrograde)
-        if self.x0 == 1.0:
-            self.a_table = self.a  # prograde
-        elif self.x0 == -1.0:
-            self.a_table = -self.a  # retrograde
-        else:
-            raise ValueError("Invalid x0 value. Expected 1.0 or -1.0.")
-
-        # Compute separatrix for table spin
-        self.p_sep = get_separatrix(self.a_table, 0., self.x0)
-
-        # Precompute max p for interpolation regions
-        self.pmaxA = self.delta_pAmax + self.p_sep
-        self.pmaxB = self.delta_pBmax + self.p_sep
-
-
-
-
     # -----------------------------------------------------------------
     # Compute scalar energy flux
     # -----------------------------------------------------------------
-    def compute_Edot_phi(self, p):
+    def compute_Edot_phi(self, y):
         """
         Compute scalar energy flux Edot_phi for a circular orbit at radius p.
         """
-        if p <= self.p_sep:
-            raise ValueError(f"Orbital radius p={p} must be > separatrix p_sep={self.p_sep}.")
+
+        p = y[0]
+        e = y[1]
+        x = y[2]
+
+        # Compute effective spin for flux table (handles retrograde)
+        if np.isclose(x, 1.0):
+            a_table = self.a  # prograde
+        elif np.isclose(x, -1.0):
+            a_table = -self.a  # retrograde
+        else:
+            raise ValueError("Invalid x0 value. Expected 1.0 or -1.0.")
+
+
+        if not np.isclose(e, 0.0):
+            raise ValueError("Eccentricity e must be zero for circular orbits.")
+
+        # Compute separatrix for table spin
+        p_sep = get_separatrix(a_table, e, x)
+
+        # Precompute max p for interpolation regions
+        pmaxA = self.delta_pAmax + p_sep
+        pmaxB = self.delta_pBmax + p_sep
+
+        if p <= p_sep:
+            raise ValueError(f"Orbital radius p={p} must be > separatrix p_sep={p_sep}.")
 
         # Define normalized spin coordinate for interpolation
-        z = ((1 - self.a_table)**(1/3) - self.chi_min) / (self.chi_max - self.chi_min)
+        z = ((1 - a_table)**(1/3) - self.chi_min) / (self.chi_max - self.chi_min)
         
         # Check if z is within valid interpolation range
-        if z < self.coord_tol or z > 1.0 - self.coord_tol:
-            raise ValueError(f"Normalized spin coordinate z = {z} is outside valid range [{self.coord_tol}, {1.0 - self.coord_tol}].")
+        if z < - self.coord_tol or z > 1.0 + self.coord_tol:
+            raise ValueError(f"Normalized spin coordinate z = {z} is outside valid range [{- self.coord_tol}, {1.0 + self.coord_tol}].")
 
+        # Clip z to [0, 1] to ensure it stays within interpolation bounds
+        z = np.clip(z, 0.0, 1.0)
 
         # Compute normalized orbital radius coordinate for interpolation
         #  Interpolate using table A
-        if p < self.pmaxA:
-            u = (np.log(p - self.p_sep + self.Cp) - self.CDelta) / np.log(2)
+        if p < pmaxA:
+            u = (np.log(p - p_sep + self.Cp) - self.CDelta) / np.log(2)
             
-            if u < self.coord_tol or u > 1.0 - self.coord_tol:
-                raise ValueError(f"Normalized spin coordinate u = {u} is outside valid range [{self.coord_tol}, {1.0 - self.coord_tol}].")
+            if u < - self.coord_tol or u > 1.0 + self.coord_tol:
+                raise ValueError(f"Normalized spin coordinate u = {u} is outside valid range [{- self.coord_tol}, {1.0 + self.coord_tol}].")
+            
+            # Clip u to [0, 1] to ensure it stays within interpolation bounds
+            u = np.clip(u, 0.0, 1.0)
             
             F = self.Fphi_interp_A(z, u)   
         #  Interpolate using table B              
         else:
-            u = (self.delta_pBmin**(-0.5) - (p - self.p_sep)**(-0.5)) / (self.delta_pBmin**(-0.5) - (self.pmaxB - self.p_sep)**(-0.5))
+            u = (self.delta_pBmin**(-0.5) - (p - p_sep)**(-0.5)) / (self.delta_pBmin**(-0.5) - (pmaxB - p_sep)**(-0.5))
 
-            if u < self.coord_tol or u > 1.0 - self.coord_tol:
-                raise ValueError(f"Normalized spin coordinate u = {u} is outside valid range [{self.coord_tol}, {1.0 - self.coord_tol}].")
+            if u < -self.coord_tol or u > 1.0 + self.coord_tol:
+                raise ValueError(f"Normalized spin coordinate u = {u} is outside valid range [{-self.coord_tol}, {1.0 + self.coord_tol}].")
             
+            # Clip u to [0, 1] to ensure it stays within interpolation bounds
+            u = np.clip(u, 0.0, 1.0)
+
             F = self.Fphi_interp_B(z, u)           
         
         # Add leading-order post-Newtonian contribution 
@@ -176,7 +191,7 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         """
         
         # Compute scalar flux at current radius
-        Edot_phi = self.compute_Edot_phi(y[0])
+        Edot_phi = self.compute_Edot_phi(y)
 
         # Scale by scalar charge squared if provided
         q_s2 = self.additional_args[0] if hasattr(self, "additional_args") and len(self.additional_args) > 0 else 0.0
