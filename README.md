@@ -13,19 +13,20 @@ After installing FEW, clone this repository:
 ```
 git clone https://github.com/susannabarsanti/ModifiedEMRIWaveforms.git
 cd ModifiedEMRIWaveforms
+pip install -e .
 ```
 Alternatively, you can download the repository as a ZIP archive from GitHub.
 
 ## Repository Structure
 The files in ModifiedEMRIWaveforms include: 
-- Scalar_Trajectories.py : python script containing the trajectory class 
-- data/ : data folder containing the fluxes for trajectory production
-- notebook_example.ipynb : interactive notebook demonstrating how to run the code
+- mew/scalar_flux.py : python script containing the trajectory class 
+- mew/data/ : data folder containing the fluxes for trajectory production
+- notebooks/example.ipynb : interactive notebook demonstrating how to run the code
 
 ## Usage 
 Once the repository is downloaded, you can produce your modified waveform in a python script by importing the class as
 ```
-from Scalar_Trajectories import KerrCircEqFluxScalar
+from mew import KerrCircEqFluxScalar
 ```
 You can now use the trajectory class in FEW, for instance: 
 ```
@@ -44,7 +45,7 @@ Kerr_waveform = GenerateEMRIWaveform(
     )
 ```
 
-For further details, see notebook_example.ipynb. 
+For further details, see notebooks/example.ipynb. 
 
 ## Software release
 
