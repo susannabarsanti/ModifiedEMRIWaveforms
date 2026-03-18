@@ -27,7 +27,9 @@ The files in ModifiedEMRIWaveforms include:
 The class KerrCircEqFluxScalar build equatorial circular trajectories around Kerr black holes. The domain of validity is the same of FEW v2.0.0 for eccentricity e=0, namely
 - the semi-latus rectum ranges from the separatrix up to 200M;
 - the primary spin ranges between -0.999M and 0.999M.
+
 A retrograde trajectory is obtained by choosing the input parameters such that the primary spin a>0 and the orbital inclination x=-1. 
+In the presence of a scalar charge \(d\) carried by the secondary object, the value of the squared scalar charge $d^2$ is passed to the trajectory as the first additional parameter. 
 
 ## Data
 The scalar fluxes have been computed with [STORM](https://github.com/saragliorio/STORM) with an accuracy of $10^{-8}$.
