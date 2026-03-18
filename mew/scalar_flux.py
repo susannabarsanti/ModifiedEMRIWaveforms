@@ -124,7 +124,7 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         elif np.isclose(x, -1.0):
             a_table = -self.a  # retrograde
         else:
-            raise ValueError("Invalid x0 value. Expected 1.0 or -1.0.")
+            raise ValueError("Cosine of inclination angle x must be 1 (prograde) or -1 (retrograde) for circular equatorial orbits.")
 
 
         if not np.isclose(e, 0.0):
