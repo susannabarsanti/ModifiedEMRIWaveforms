@@ -109,7 +109,7 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
     # -----------------------------------------------------------------
     # Compute scalar energy flux
     # -----------------------------------------------------------------
-    def compute_Edot_phi(self, y):
+    def compute_Edot_phi(self, prograde, y):
         """
         Compute scalar energy flux Edot_phi for a circular orbit at radius p.
         """
@@ -118,21 +118,21 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         e = y[1]
         x = y[2]
 
-        # Compute effective spin for flux table (handles retrograde)
-        if np.isclose(x, 1.0):
-            a_table = self.a  # prograde
-        elif np.isclose(x, -1.0):
-            a_table = -self.a  # retrograde
+        if (prograde == True):
+            a_table = np.abs(self.a)
+
         else:
-            raise ValueError("Cosine of inclination angle x must be 1 (prograde) or -1 (retrograde) for circular equatorial orbits.")
+            a_table = -np.abs(self.a)
+
 
 
         if not np.isclose(e, 0.0):
             raise ValueError("Eccentricity e must be zero for circular orbits.")
 
         # Compute separatrix for table spin
-        p_sep = get_separatrix(a_table, e, x)
+        p_sep = get_separatrix(a_table, 0.0, 1.0) #a_table is positve if orbit is prograde and negative is orbit is retrograde, so to compute the separatrix we can just take x = 1.0. 
 
+        
         # Precompute max p for interpolation regions
         pmaxA = self.delta_pAmax + p_sep
         pmaxB = self.delta_pBmax + p_sep
@@ -189,9 +189,17 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         """
         Add scalar flux contribution to the RHS of orbital evolution ODE.
         """
-        
+        x = y[2]
+    
+        if (self.a * x >= 0.0):
+            prograde = True
+            a_evolution = np.abs(self.a)
+        else:
+            prograde = False
+            a_evolution = -np.abs(self.a)
+
         # Compute scalar flux at current radius
-        Edot_phi = self.compute_Edot_phi(y)
+        Edot_phi = self.compute_Edot_phi(prograde, y)
 
         # Scale by scalar charge squared if provided
         q_s2 = self.additional_args[0] if hasattr(self, "additional_args") and len(self.additional_args) > 0 else 0.0
@@ -201,9 +209,9 @@ class KerrCircEqFluxScalar(KerrEccEqFlux):
         sqrt_r = np.sqrt(y[0])
         r_32 = y[0]**1.5
         r2 = y[0]**2
-        numerator = -3 * self.a**2 + 8 * self.a * sqrt_r + (-6 + y[0]) * y[0]
-        term1 = 2 * self.a * y[0] + (-3 + y[0]) * r_32
-        term2 = 2 * self.a * r_32 + (-3 + y[0]) * r2
+        numerator = -3 * a_evolution**2 + 8 * a_evolution * sqrt_r + (-6 + y[0]) * y[0]
+        term1 = 2 * a_evolution * y[0] + (-3 + y[0]) * r_32
+        term2 = 2 * a_evolution * r_32 + (-3 + y[0]) * r2
         denominator = 2 * term1 * np.sqrt(term2)
         dE_dp = numerator/denominator
         
