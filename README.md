@@ -3,8 +3,6 @@ Repository for gravitational waves from asymmetric binaries with scalar fields, 
 
 If you make use of this repository, please see the [citation section](#citation) below, together with the citation section in [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
 
-The data have been produced with [STORM](https://github.com/saragliorio/STORM). The references are provided in papers.bib. 
-
 ## Set up 
 
 To make use of this repository and produce waveforms from asymmetric binaries with scalar fields, you need to install [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation) first. A detailed installation guide can be found in the [official documentation](https://fastemriwaveforms.readthedocs.io/en/stable/). 
@@ -36,7 +34,7 @@ In the presence of a scalar charge \(d\) carried by the secondary object, the va
 The scalar fluxes have been computed with [STORM](https://github.com/saragliorio/STORM) with an accuracy of $10^{-8}$.
 
 ## Usage 
-Once the repository is downloaded, you can produce your modified waveform in a python script by importing the class as
+Once the repository is installed, you can produce your modified waveform in a python script by importing the class as
 ```
 from mew import KerrCircEqFluxScalar
 ```
@@ -66,12 +64,11 @@ This repository is archived on Zenodo and each software release is assigned a DO
 
 ## Citation
 
-If you use this code in your research, please cite the software release.
-You can find the citation information in the `CITATION.cff` file in this repository.
+If you use this code in your research, please cite the software release on [Zenodo]. Please make sure to also cite the C++ code use to produce the data, [STORM](https://github.com/saragliorio/STORM), with the related paper. The references are provided in papers.bib. You can find the citation information in the `CITATION.cff` file in this repository.
 
 ## Acknowledgements
 
 This code builds upon the
 [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms)
-framework developed by the Black Hole Perturbation Toolkit.
+framework developed by the [Black Hole Perturbation Toolkit](https://bhptoolkit.org).
 
