@@ -1,5 +1,5 @@
 # ModifiedEMRIWaveforms
-Repository for gravitational waves from asymmetric binaries with scalar fields, building on [FastEMRIWaveforms (few)](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
+Repository for gravitational waves from asymmetric binaries with scalar fields, building on [FastEMRIWaveforms (few)](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms).
 
 If you make use of this repository, please see the [citation section](#citation) below, together with the citation section in [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
 
