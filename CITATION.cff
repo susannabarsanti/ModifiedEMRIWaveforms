@@ -27,3 +27,25 @@ repository-code: https://github.com/susannabarsanti/ModiefiedEMRIWaveforms
 version: 1.0.0
 date-released: 2026-03-06
 license: MIT
+
+references:
+  - type: article
+    authors:
+      - family-names: Gliorio
+        given-names: Sara
+      - family-names: Della Rocca
+        given-names: Matteo
+      - family-names: Barsanti
+        given-names: Susanna
+      - family-names: Gualtieri
+        given-names: Leonardo
+      - family-names: Maselli
+        given-names: Andrea
+      - family-names: Sotiriou
+        given-names: Thomas P.
+    title: "Adiabatic evolution of asymmetric binaries on generic orbits with new fundamental fields I: characterization of gravitational wave fluxes"
+    year: 2026
+    month: 3
+    archive: arXiv
+    eprint: "2603.10116"
+    primary-class: gr-qc
