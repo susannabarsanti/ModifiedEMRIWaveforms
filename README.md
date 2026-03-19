@@ -1,14 +1,15 @@
 # ModifiedEMRIWaveforms
-Repository for gravitational waves from asymmetric binaries with scalar fields, building on [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
+Repository for gravitational waves from asymmetric binaries with scalar fields, building on [FastEMRIWaveforms (few)](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
 
 If you make use of this repository, please see the [citation section](#citation) below, together with the citation section in [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
+
+The data have been produced with [STORM](https://github.com/saragliorio/STORM). The references are provided in papers.bib. 
 
 ## Set up 
 
 To make use of this repository and produce waveforms from asymmetric binaries with scalar fields, you need to install [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation) first. A detailed installation guide can be found in the [official documentation](https://fastemriwaveforms.readthedocs.io/en/stable/). 
 
-
-After installing FEW, clone this repository:
+We recommend installing few in a conda environment. In this way, after installin few, you can clone this repoistory and install it in the same environment: 
 
 ```
 git clone https://github.com/susannabarsanti/ModifiedEMRIWaveforms.git
