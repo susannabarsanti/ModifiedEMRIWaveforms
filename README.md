@@ -72,7 +72,7 @@ emri_params = [
     Phi_r0,
 ]
 
-Lambda = d**2
+Lambda = d**2 #squared scalar charge
 add_params = [Lambda]
 
 waveform_kwargs = {
