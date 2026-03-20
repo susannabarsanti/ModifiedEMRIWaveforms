@@ -54,6 +54,33 @@ Kerr_waveform = GenerateEMRIWaveform(
         use_gpu=use_gpu,
         return_list=False,
     )
+
+emri_params = [
+    M,
+    mu,
+    a,
+    p0_GR,
+    e0,
+    x_I0,
+    dist,
+    qS,
+    phiS,
+    qK,
+    phiK,
+    Phi_phi0,
+    Phi_theta0,
+    Phi_r0,
+]
+
+Lambda = d**2
+add_params = [Lambda]
+
+waveform_kwargs = {
+    "T": Tobs,
+    "dt": dt
+}
+
+Kerr_waveform = Kerr_waveform(*emri_params, *add_params, **waveform_kwargs)
 ```
 
 For further details, see notebooks/example.ipynb. 
