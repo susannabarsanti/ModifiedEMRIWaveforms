@@ -9,4 +9,8 @@ setup(
         "scipy",
         "h5py",
     ],
+    include_package_data=True,
+    package_data={
+        "mew": ["data/*.dat"],
+    },
 )
