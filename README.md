@@ -18,7 +18,7 @@ Alternatively, you can download the repository as a ZIP archive from GitHub.
 
 ## Repository Structure
 The files in ModifiedEMRIWaveforms include: 
-- mew/scalar_flux.py : python script containing the trajectory class 
+- mew/flux.py : python script containing the trajectory class 
 - mew/data/ : data folder containing the fluxes for trajectory production
 - notebooks/example.ipynb : interactive notebook demonstrating how to run the code
 
