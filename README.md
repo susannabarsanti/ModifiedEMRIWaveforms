@@ -59,7 +59,7 @@ emri_params = [
     M,
     mu,
     a,
-    p0_GR,
+    p0,
     e0,
     x_I0,
     dist,
