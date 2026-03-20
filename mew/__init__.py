@@ -1,3 +1,3 @@
-from .scalar_flux import KerrCircEqFluxScalar
+from .flux import KerrCircEqFluxScalar
 
 __all__ = ["KerrCircEqFluxScalar"]
