@@ -17,7 +17,6 @@ If you make use of this repository, please see the <a href="#citation">citation 
 <a href="https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation">FastEMRIWaveforms</a>.
 </p>
 
-    </td>
   </tr>
 </table>
 
