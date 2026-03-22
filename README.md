@@ -1,4 +1,4 @@
-#ModifiedEMRIWaveforms
+# ModifiedEMRIWaveforms
 
 <table>
   <tr>
