@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/logo.png" width="200">
+</p>
+
+
 # ModifiedEMRIWaveforms
 ModifiedEMRIWaveforms (MEW) is a Python package for gravitational waves from asymmetric binaries with scalar fields, building on [FastEMRIWaveforms (FEW)](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms).
 
