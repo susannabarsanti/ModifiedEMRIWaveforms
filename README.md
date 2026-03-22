@@ -12,14 +12,11 @@ ModifiedEMRIWaveforms (MEW) is a Python package for gravitational waves from asy
 <a href="https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms">FastEMRIWaveforms (FEW)</a>.
 </p>
 
-<p>
-If you make use of this repository, please see the <a href="#citation">citation section</a> below, together with the citation section in 
-<a href="https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation">FastEMRIWaveforms</a>.
-</p>
-
   </tr>
 </table>
 
+If you make use of this repository, please see the <a href="#citation">citation section</a> below, together with the citation section in 
+<a href="https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation">FastEMRIWaveforms</a>.
 
 ## Set up 
 
