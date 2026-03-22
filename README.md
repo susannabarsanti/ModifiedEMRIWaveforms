@@ -1,11 +1,11 @@
+#ModifiedEMRIWaveforms
+
 <table>
   <tr>
     <td valign="middle">
       <img src="logo.png" width="180">
     </td>
     <td valign="top" style="padding-left: 20px;">
-
-<h1>ModifiedEMRIWaveforms</h1>
 
 <p>
 ModifiedEMRIWaveforms (MEW) is a Python package for gravitational waves from asymmetric binaries with scalar fields, building on 
