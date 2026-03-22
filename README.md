@@ -5,11 +5,17 @@
     </td>
     <td valign="top" style="padding-left: 20px;">
 
+<h1>ModifiedEMRIWaveforms</h1>
 
-# ModifiedEMRIWaveforms
-ModifiedEMRIWaveforms (MEW) is a Python package for gravitational waves from asymmetric binaries with scalar fields, building on [FastEMRIWaveforms (FEW)](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms).
+<p>
+ModifiedEMRIWaveforms (MEW) is a Python package for gravitational waves from asymmetric binaries with scalar fields, building on 
+<a href="https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms">FastEMRIWaveforms (FEW)</a>.
+</p>
 
-If you make use of this repository, please see the [citation section](#citation) below, together with the citation section in [FastEMRIWaveforms](https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation).
+<p>
+If you make use of this repository, please see the <a href="#citation">citation section</a> below, together with the citation section in 
+<a href="https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms?tab=readme-ov-file#citation">FastEMRIWaveforms</a>.
+</p>
 
     </td>
   </tr>
