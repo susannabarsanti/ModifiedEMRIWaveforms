@@ -1,6 +1,6 @@
 <table>
   <tr>
-    <td valign="top">
+    <td valign="middle">
       <img src="logo.png" width="180">
     </td>
     <td valign="top" style="padding-left: 20px;">
