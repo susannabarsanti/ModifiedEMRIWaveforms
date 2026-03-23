@@ -1,5 +1,5 @@
 # ModifiedEMRIWaveforms
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19190130.svg)](https://doi.org/10.5281/zenodo.19190130)
 <table>
   <tr>
     <td valign="middle">
