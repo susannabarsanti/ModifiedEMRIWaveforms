@@ -37,8 +37,8 @@ Alternatively, you can download the repository as a ZIP archive from GitHub.
 ## Repository Structure
 The files in ModifiedEMRIWaveforms include: 
 - mew/flux.py : python script containing the trajectory class 
-- mew/data/ : data folder containing the fluxes for trajectory production
-- notebooks/example.ipynb : interactive notebook demonstrating how to run the code
+- mew/data/ : data folder containing the fully relativistic scalar fluxes for trajectory production
+- notebooks/example.ipynb : interactive notebook demonstrating how to run the code, generating inspirals and waveforms 
 
 ## Trajectory: KerrCircEqFluxScalar
 The class KerrCircEqFluxScalar build equatorial circular trajectories around Kerr black holes. The domain of validity is the same of FEW v2.0.0 for eccentricity e=0, namely
