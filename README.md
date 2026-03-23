@@ -103,6 +103,11 @@ Kerr_waveform = Kerr_waveform(*emri_params, *add_params, **waveform_kwargs)
 
 For further details, see notebooks/example.ipynb. 
 
+
+## Contributors
+The [CONTRIBUTORS file](CONTRIBUTORS.md)lists all contributors to the release.
+
+
 ## Software release
 
 This repository is archived on Zenodo and each software release is assigned a DOI.
