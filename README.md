@@ -105,7 +105,7 @@ For further details, see notebooks/example.ipynb.
 
 
 ## Contributors
-The [CONTRIBUTORS file](CONTRIBUTORS.md)lists all contributors to the release.
+The [CONTRIBUTORS file](CONTRIBUTORS.md) lists all contributors to the release.
 
 
 ## Software release
