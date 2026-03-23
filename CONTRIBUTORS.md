@@ -1,11 +1,11 @@
 # CONTRIBUTORS
 
-Below is a list of those who have contributed code or data to the releases of FEW.
+Below is a list of those who have contributed to the releases of MEW.
 
 ## MEW 1.0.0
 
 - **Susanna Barsanti**
-  - Set up the project infrastructure
+  - Set up the project infrastructure.
   - Contributed to `KerrCircEqFluxScalar` class.
   - Contributed to the `example` file.
 
