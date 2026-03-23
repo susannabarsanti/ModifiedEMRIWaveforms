@@ -110,11 +110,11 @@ The [CONTRIBUTORS file](CONTRIBUTORS.md) lists all contributors to the release.
 
 ## Software release
 
-This repository is archived on Zenodo and each software release is assigned a DOI.
+This repository is archived on [Zenodo](https://zenodo.org/records/19190130) and each software release is assigned a DOI.
 
 ## Citation
 
-If you use this code in your research, please cite the software release on [Zenodo]. Please make sure to also cite the C++ code use to produce the data, [STORM](https://github.com/saragliorio/STORM), with the related paper. The references are provided in papers.bib. You can find the citation information in the `CITATION.cff` file in this repository.
+If you use this code in your research, please cite the software release on [Zenodo](https://zenodo.org/records/19190130). Please make sure to also cite the C++ code use to produce the data, [STORM](https://github.com/saragliorio/STORM), with the related paper. The references are provided in papers.bib. You can find the citation information in the `CITATION.cff` file in this repository.
 
 ## Acknowledgements
 
