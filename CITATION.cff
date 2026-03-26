@@ -2,6 +2,7 @@ cff-version: 1.2.0
 title: ModifiedEMRIWaveforms
 message: "If you use this software, please cite it as below."
 type: software
+doi: 10.5281/zenodo.19190130
 
 authors:
   - family-names: Gliorio
