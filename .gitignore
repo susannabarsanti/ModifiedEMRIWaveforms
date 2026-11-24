@@ -15,7 +15,7 @@ env/
 
 # Build / install artifacts
 build/
-ModifiedEMRIWaveform.egg-info/
+ModifiedEMRIWaveforms.egg-info/
 dist/
 *.egg
 *.whl
